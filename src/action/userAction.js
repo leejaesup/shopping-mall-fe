@@ -2,9 +2,46 @@ import api from "../utils/api";
 import * as types from "../constants/user.constants";
 import { commonUiActions } from "./commonUiAction";
 import * as commonTypes from "../constants/commonUI.constants";
-const loginWithToken = () => async (dispatch) => {};
-const loginWithEmail = (payload) => async (dispatch) => {};
-const logout = () => async (dispatch) => {};
+import {LOGIN_WITH_TOKEN_REQUEST} from "../constants/user.constants";
+const loginWithToken = () => async (dispatch) => {
+    try {
+        dispatch({type: types.LOGIN_WITH_TOKEN_REQUEST});
+        const response = await api.get("/user/me");
+
+        if (response.status !== 200) {
+            throw new Error(response.error);
+        }
+        dispatch({
+            type: types.LOGIN_WITH_TOKEN_SUCCESS,
+            payload: response.data,
+        })
+    } catch (error) {
+        dispatch({type : types.LOGIN_WITH_TOKEN_FAIL, payload: error});
+        dispatch(logout());
+    }
+};
+const loginWithEmail = ({email, password}) => async (dispatch) => {
+    try {
+        dispatch({type: types.LOGIN_REQUEST});
+        const response = await api.post("/auth/login", {email, password});
+
+        if (response.status !== 200) {
+            throw new Error(response.error);
+        }
+
+        sessionStorage.setItem("token", response.data.token);
+        dispatch({type: types.LOGIN_SUCCESS, payload: response.data});
+    } catch (error) {
+        dispatch({type : types.LOGIN_FAIL, payload: error.error});
+    }
+};
+const logout = () => async (dispatch) => {
+    // user정보를 지우고
+    dispatch({type: types.LOGOUT});
+
+    // session token의 값을 지운다
+    sessionStorage.removeItem("token");
+};
 
 const loginWithGoogle = (token) => async (dispatch) => {};
 
