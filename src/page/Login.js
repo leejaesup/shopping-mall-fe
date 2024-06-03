@@ -65,6 +65,11 @@ const Login = () => {
           </div>
 
           <div className="text-align-center mt-2">
+            <p className="admin">관리자 계정 : admin@gmail.com</p>
+            <p className="admin">비밀번호 : 0000</p>
+            <div className="display-center"></div>
+          </div>
+          <div className="text-align-center mt-2">
             <p>-외부 계정으로 로그인하기-</p>
             <div className="display-center"></div>
           </div>
