@@ -12,7 +12,7 @@ import ProductTable from "../component/ProductTable";
 
 const AdminProduct = () => {
   const navigate = useNavigate();
-  const {productList} = useSelector((state) => state.product)
+  const {productList, totalPageNum} = useSelector((state) => state.product)
   const [query, setQuery] = useSearchParams();
   const dispatch = useDispatch();
   const [showDialog, setShowDialog] = useState(false);
@@ -35,11 +35,22 @@ const AdminProduct = () => {
 
   //상품리스트 가져오기 (url쿼리 맞춰서)
   useEffect(() => {
-    dispatch(productActions.getProductList());
-  }, []);
+    dispatch(productActions.getProductList({...searchQuery}));
+  }, [query]);
 
   useEffect(() => {
     //검색어나 페이지가 바뀌면 url바꿔주기 (검색어또는 페이지가 바뀜 => url 바꿔줌=> url쿼리 읽어옴=> 이 쿼리값 맞춰서  상품리스트 가져오기)
+    if (searchQuery.name === "") {
+      delete searchQuery.name;
+    }
+
+    const params = new URLSearchParams(searchQuery);
+    const query = params.toString();
+
+    console.log("searchQuery = ", searchQuery);
+    console.log("query = ", query);
+
+    navigate("?" + query);
   }, [searchQuery]);
 
   const deleteItem = (id) => {
@@ -60,6 +71,9 @@ const AdminProduct = () => {
 
   const handlePageClick = ({ selected }) => {
     //  쿼리에 페이지값 바꿔주기
+    console.log("selected = ", selected);
+    setSearchQuery({...searchQuery, page: selected + 1});
+
   };
 
   return (
@@ -87,8 +101,8 @@ const AdminProduct = () => {
           nextLabel="next >"
           onPageChange={handlePageClick}
           pageRangeDisplayed={5}
-          pageCount={100}
-          forcePage={2} // 1페이지면 2임 여긴 한개씩 +1 해야함
+          pageCount={totalPageNum}
+          forcePage={searchQuery.page - 1} // 1페이지면 2임 여긴 한개씩 +1 해야함
           previousLabel="< previous"
           renderOnZeroPageCount={null}
           pageClassName="page-item"
