@@ -54,12 +54,16 @@ const AdminProduct = () => {
   }, [searchQuery]);
 
   const deleteItem = (id) => {
-    //아이템 삭제하가ㅣ
+    //아이템 삭제하기
+    dispatch(productActions.deleteProduct(id));
   };
 
   const openEditForm = (product) => {
     //edit모드로 설정하고
+    setMode("edit");
     // 아이템 수정다이얼로그 열어주기
+    dispatch({type: types.SET_SELECTED_PRODUCT, payload: product})
+    setShowDialog(true);
   };
 
   const handleClickNewItem = () => {
@@ -73,7 +77,6 @@ const AdminProduct = () => {
     //  쿼리에 페이지값 바꿔주기
     console.log("selected = ", selected);
     setSearchQuery({...searchQuery, page: selected + 1});
-
   };
 
   return (

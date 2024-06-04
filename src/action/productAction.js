@@ -27,6 +27,7 @@ const createProduct = (formData) => async (dispatch) => {
   try {
     dispatch({type: types.PRODUCT_CREATE_REQUEST})
     const response = await api.post("/product", formData);
+
     if (response.status !== 200) {
       throw new Error(response.error);
     }
@@ -36,9 +37,43 @@ const createProduct = (formData) => async (dispatch) => {
     dispatch(commonUiActions.showToastMessage(error.error, "error"));
   }
 };
-const deleteProduct = (id) => async (dispatch) => {};
 
-const editProduct = (formData, id) => async (dispatch) => {};
+const deleteProduct = (id) => async (dispatch) => {
+  try {
+    dispatch({type: types.PRODUCT_DELETE_REQUEST});
+    const response = await api.delete(`/product/${id}`);
+
+    if (response.status !== 200) {
+      throw new Error(response.error);
+    }
+
+    dispatch({type: types.PRODUCT_DELETE_SUCCESS});
+    dispatch(commonUiActions.showToastMessage("상품 제거 완료", "success"));
+
+    dispatch(getProductList({page:1, name: ""}));
+  } catch (error) {
+    dispatch({type: types.PRODUCT_DELETE_FAIL, payload: error.error});
+    dispatch(commonUiActions.showToastMessage(error.error, "error"));
+  }
+};
+
+const editProduct = (formData, id) => async (dispatch) => {
+  try {
+    dispatch({type: types.PRODUCT_EDIT_REQUEST})
+    const response = await api.put(`/product/${id}`, formData);
+
+    if (response.status !== 200) {
+      throw new Error(response.error);
+    }
+    dispatch({type: types.PRODUCT_EDIT_SUCCESS, payload: response.data.data});
+    dispatch(commonUiActions.showToastMessage("상품 수정 완료", "success"));
+
+    dispatch(getProductList({page:1, name: ""}));
+  } catch (error) {
+    dispatch({type: types.PRODUCT_EDIT_FAIL, payload: error.error});
+    dispatch(commonUiActions.showToastMessage(error.error, "error"));
+  }
+};
 
 export const productActions = {
   getProductList,
