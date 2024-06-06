@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import {
@@ -7,10 +7,13 @@ import {
   faSearch,
   faShoppingBag,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+// import {Link, useSearchParams} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../action/userAction";
+import {productActions} from "../action/productAction";
+import * as types from "../constants/product.constants";
 
 const Navbar = ({ user }) => {
   const dispatch = useDispatch();
@@ -28,12 +31,20 @@ const Navbar = ({ user }) => {
     "지속가능성",
   ];
   let [width, setWidth] = useState(0);
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+
   const onCheckEnter = (event) => {
     if (event.key === "Enter") {
       if (event.target.value === "") {
+        dispatch({type: types.SET_SEARCH_KEYWORD, payload: ""});
         return navigate("/");
       }
+
+      let searchKeyword = event.target.value;
+      dispatch({type: types.SET_SEARCH_KEYWORD, payload: searchKeyword});
+
+      console.log("searchKeyword = ", searchKeyword);
+
       navigate(`?name=${event.target.value}`);
     }
   };
@@ -51,6 +62,7 @@ const Navbar = ({ user }) => {
                 type="text"
                 placeholder="제품검색"
                 onKeyPress={onCheckEnter}
+                // onChange={(event) => setKeyword(event.target.value)}
               />
             </div>
             <button
@@ -124,7 +136,7 @@ const Navbar = ({ user }) => {
 
       <div className="nav-logo">
         <Link to="/">
-          <img width={100} src="/image/hm-logo.png" alt="hm-logo.png" />
+          <img width={100} src="/image/logo.png" alt="logo.png" />
         </Link>
       </div>
       <div className="nav-menu-area">

@@ -6,19 +6,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { productActions } from "../action/productAction";
 import { commonUiActions } from "../action/commonUiAction";
 import ReactPaginate from "react-paginate";
+import Loading from "../component/Loading";
 
 const ProductAll = () => {
   const navigate = useNavigate();
-  const {productList, totalPageNum} = useSelector((state) => state.product)
-  const [query, setQuery] = useSearchParams();
   const dispatch = useDispatch();
+  const loading = useSelector((state) => state.user.loading);
+  const searchKeyword = useSelector((state) => state.product.searchKeyword);
+
+  const {productList, totalPageNum} = useSelector((state) => state.product)
+  const error = useSelector((state) => state.product.error);
+  const [query, setQuery] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState({
     page: query.get("page") || 1,
     name: query.get("name") || "",
   }); //검색 조건들을 저장하는 객체
-  const error = useSelector((state) => state.product.error);
-  // 처음 로딩하면 상품리스트 불러오기
 
+  // 처음 로딩하면 상품리스트 불러오기
   //상품리스트 가져오기 (url쿼리 맞춰서)
   useEffect(() => {
     dispatch(productActions.getProductList({...searchQuery}));
@@ -39,11 +43,18 @@ const ProductAll = () => {
     navigate("?" + query);
   }, [searchQuery]);
 
+
   const handlePageClick = ({ selected }) => {
     //  쿼리에 페이지값 바꿔주기
     console.log("selected = ", selected);
     setSearchQuery({...searchQuery, page: selected + 1});
   };
+
+  useEffect(() => {
+    setSearchQuery({ ...searchQuery, name: searchKeyword});
+  }, [searchKeyword])
+
+  if (loading || !productList) return <Loading />;
 
   return (
     <Container>

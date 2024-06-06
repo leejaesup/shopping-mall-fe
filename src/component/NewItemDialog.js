@@ -5,10 +5,6 @@ import CloudinaryUploadWidget from "../utils/CloudinaryUploadWidget";
 import { productActions } from "../action/productAction";
 import { CATEGORY, STATUS, SIZE } from "../constants/product.constants";
 import "../style/adminProduct.style.css";
-import * as types from "../constants/product.constants";
-import { commonUiActions } from "../action/commonUiAction";
-import {set} from "@cloudinary/url-gen/actions/variable";
-import {to} from "@react-spring/web";
 
 const InitialFormData = {
   name: "",
@@ -21,17 +17,21 @@ const InitialFormData = {
   price: 0,
 };
 const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
-  // const selectedProduct = useSelector((state) => state.product.selectedProduct);
-  const selectedProduct = useSelector((state) => state.product);
-  const { error } = useSelector((state) => state.product);
+  const selectedProduct = useSelector((state) => state.product.selectedProduct);
+  // const {selectedProduct} = useSelector((state) => state.product);
+  const { error, success } = useSelector((state) => state.product);
   const [formData, setFormData] = useState(
       mode === "new" ? { ...InitialFormData } : selectedProduct
   );
   const [stock, setStock] = useState([]);
   const dispatch = useDispatch();
   const [stockError, setStockError] = useState(false);
+
   const handleClose = () => {
     //모든걸 초기화시키고;
+    setFormData({ ...InitialFormData });
+    setStock([]);
+
     // 다이얼로그 닫아주기
     setShowDialog(false);
   };
@@ -57,7 +57,8 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
       setShowDialog(false);
     } else {
       // 상품 수정하기
-      dispatch(productActions.editProduct({...formData, stock: totalStock}));
+      console.log("selectedProduct._id = ", selectedProduct._id);
+      dispatch(productActions.editProduct({...formData, stock: totalStock}, selectedProduct._id));
       setShowDialog(false);
     }
   };
@@ -124,8 +125,8 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
         setFormData(selectedProduct);
 
         const stockArray = Object.keys(selectedProduct.stock).map((size) => [
-            size,
-            selectedProduct.stock[size],
+          size,
+          selectedProduct.stock[size],
         ]);
 
         setStock(stockArray);
@@ -143,9 +144,11 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
       <Modal show={showDialog} onHide={handleClose}>
         <Modal.Header closeButton>
           {mode === "new" ? (
-              <Modal.Title>Create New Product</Modal.Title>
+              // <Modal.Title>Create New Product</Modal.Title>
+              <Modal.Title>상품 등록</Modal.Title>
           ) : (
-              <Modal.Title>Edit Product</Modal.Title>
+              // <Modal.Title>Edit Product</Modal.Title>
+              <Modal.Title>상품 수정</Modal.Title>
           )}
         </Modal.Header>
 
@@ -193,7 +196,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
                 <span className="error-message">재고를 추가해주세요</span>
             )}
             <Button size="sm" onClick={addStock}>
-              Add +
+              추가
             </Button>
             <div className="mt-2">
               {stock.map((item, index) => (
@@ -306,11 +309,11 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
           </Row>
           {mode === "new" ? (
               <Button variant="primary" type="submit">
-                Submit
+                등록
               </Button>
           ) : (
               <Button variant="primary" type="submit">
-                Edit
+                수정
               </Button>
           )}
         </Form>

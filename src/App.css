@@ -1,6 +1,7 @@
 body{
   font-family: sans-serif;
   background-color: #FAF9F8;
+  /*background-color: #292929;*/
 }
 .nav-header{
   display:flex;
@@ -21,6 +22,10 @@ body{
 .menu{
   display: flex;
   list-style-type: none;
+  padding: 30px;
+  justify-content: center;
+  align-items: center;
+  font-family: "YeojuCeramic";
   padding: 20px;
 }
 .menu li a{

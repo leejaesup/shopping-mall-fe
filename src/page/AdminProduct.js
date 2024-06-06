@@ -9,10 +9,12 @@ import ReactPaginate from "react-paginate";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { commonUiActions } from "../action/commonUiAction";
 import ProductTable from "../component/ProductTable";
+import Loading from "../component/Loading";
 
 const AdminProduct = () => {
   const navigate = useNavigate();
   const {productList, totalPageNum} = useSelector((state) => state.product)
+  const loading = useSelector((state) => state.product.loading);
   const [query, setQuery] = useSearchParams();
   const dispatch = useDispatch();
   const [showDialog, setShowDialog] = useState(false);
@@ -45,12 +47,12 @@ const AdminProduct = () => {
     }
 
     const params = new URLSearchParams(searchQuery);
-    const query = params.toString();
+    const queryString = params.toString();
 
     console.log("searchQuery = ", searchQuery);
-    console.log("query = ", query);
+    console.log("queryString = ", queryString);
 
-    navigate("?" + query);
+    navigate("?" + queryString);
   }, [searchQuery]);
 
   const deleteItem = (id) => {
@@ -59,6 +61,7 @@ const AdminProduct = () => {
   };
 
   const openEditForm = (product) => {
+    console.log("product = ", product);
     //edit모드로 설정하고
     setMode("edit");
     // 아이템 수정다이얼로그 열어주기
@@ -79,6 +82,8 @@ const AdminProduct = () => {
     setSearchQuery({...searchQuery, page: selected + 1});
   };
 
+  if (loading || !productList) return <Loading />;
+
   return (
     <div className="locate-center">
       <Container>
@@ -91,7 +96,7 @@ const AdminProduct = () => {
           />
         </div>
         <Button className="mt-2 mb-2" onClick={handleClickNewItem}>
-          Add New Item +
+          새 상품 등록
         </Button>
 
         <ProductTable
