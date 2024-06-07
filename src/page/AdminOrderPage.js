@@ -19,6 +19,7 @@ const AdminOrderPage = () => {
     page: query.get("page") || 1,
     ordernum: query.get("ordernum") || "",
   });
+  const error = useSelector((state) => state.order.error);
   const [open, setOpen] = useState(false);
   const totalPageNum = useSelector((state) => state.order.totalPageNum);
   const tableHeader = [
@@ -33,7 +34,7 @@ const AdminOrderPage = () => {
   ];
 
   useEffect(() => {
-    dispatch(orderActions.getOrderList({ ...searchQuery }));
+    dispatch(orderActions.getOrderList({...searchQuery}));
   }, [query]);
 
   useEffect(() => {
@@ -48,11 +49,11 @@ const AdminOrderPage = () => {
 
   const openEditForm = (order) => {
     setOpen(true);
-    dispatch({ type: types.SET_SELECTED_ORDER, payload: order });
+    dispatch({type: types.SET_SELECTED_ORDER, payload: order});
   };
 
-  const handlePageClick = ({ selected }) => {
-    setSearchQuery({ ...searchQuery, page: selected + 1 });
+  const handlePageClick = ({selected}) => {
+    setSearchQuery({...searchQuery, page: selected + 1});
   };
 
   const handleClose = () => {

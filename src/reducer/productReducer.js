@@ -4,7 +4,6 @@ const initialState = {
   error: "",
   productList: [],
   totalPageNum : 1,
-  searchKeyword: "",
   selectedProduct: null
 };
 
