@@ -33,7 +33,6 @@ const getOrder = () => async (dispatch) => {
     }
 
     dispatch({type: types.GET_ORDER_SUCCESS, payload: response.data});
-    console.log("response = ", response.data);
   } catch (error) {
     dispatch({type: types.GET_ORDER_FAIL, error: error.error});
     dispatch(commonUiActions.showToastMessage(error, "error"));
@@ -69,7 +68,6 @@ const updateOrder = (id, status) => async (dispatch) => {
 
     dispatch(commonUiActions.showToastMessage("오더 업데이트 완료!", "success"));
 
-    // dispatch(getOrderList());
     dispatch(getOrderList({ page: 1, orderNum: "" }));
   } catch (error) {
     dispatch({type: types.UPDATE_ORDER_FAIL, error: error.error});

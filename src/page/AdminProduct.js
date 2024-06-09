@@ -49,9 +49,6 @@ const AdminProduct = () => {
     const params = new URLSearchParams(searchQuery);
     const queryString = params.toString();
 
-    console.log("searchQuery = ", searchQuery);
-    console.log("queryString = ", queryString);
-
     navigate("?" + queryString);
   }, [searchQuery]);
 
@@ -61,7 +58,6 @@ const AdminProduct = () => {
   };
 
   const openEditForm = (product) => {
-    console.log("product = ", product);
     //edit모드로 설정하고
     setMode("edit");
     // 아이템 수정다이얼로그 열어주기
@@ -78,7 +74,6 @@ const AdminProduct = () => {
 
   const handlePageClick = ({ selected }) => {
     //  쿼리에 페이지값 바꿔주기
-    console.log("selected = ", selected);
     setSearchQuery({...searchQuery, page: selected + 1});
   };
 

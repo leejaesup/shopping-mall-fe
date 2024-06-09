@@ -6,8 +6,6 @@ const addToCart = ({id, size}) => async (dispatch) => {
     dispatch({type: types.ADD_TO_CART_REQUEST});
     const response = await api.post("/cart", {productId: id, size, qty: 1});
 
-    console.log("response111 = ", response);
-    console.log("response111 = ", response.data.cartItemQty);
     if (response.status !== 200) {
       throw new Error(response.error);
     }
@@ -31,7 +29,6 @@ const getCartList = () => async (dispatch) => {
     }
 
     dispatch({type: types.GET_CART_LIST_SUCCESS, payload: response.data.data});
-    console.log("response = ", response.data);
   } catch (error) {
     dispatch({type: types.GET_CART_LIST_FAIL, payload: error.error});
   }

@@ -22,7 +22,6 @@ const Login = () => {
 
   const handleGoogleLogin = async (googleData) => {
     // 구글로 로그인 하기
-    console.log("test", googleData.credential);
     dispatch(userActions.loginWithGoogle(googleData.credential));
   };
 

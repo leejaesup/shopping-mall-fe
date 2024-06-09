@@ -53,7 +53,6 @@ const loginWithGoogle = (token) => async (dispatch) => {
         }
 
         sessionStorage.setItem("token", response.data.token);
-        console.log("token2 = ", response.data.token);
         dispatch({type: types.GOOGLE_LOGIN_SUCCESS, payload: response.data});
     } catch (error) {
         dispatch({type : types.GOOGLE_LOGIN_FAIL, payload: error.error});

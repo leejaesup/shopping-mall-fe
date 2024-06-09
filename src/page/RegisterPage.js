@@ -36,14 +36,14 @@ const RegisterPage = () => {
     setPolicyError(false);
     dispatch(userActions.registerUser({name, email, password}, navigate));
     //성공후 로그인 페이지로 넘어가기
-
+    navigate("/login");
   };
 
   const handleChange = (event) => {
     event.preventDefault();
     // 값을 읽어서 FormData에 넣어주기
     const {id, value, checked} = event.target;
-    console.log("event,target = ", id, value);
+
     if (id === "policy") {
       setFormData({...formData, [id]: checked});
     } else {

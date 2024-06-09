@@ -43,9 +43,6 @@ const Navbar = ({ user }) => {
       let searchKeyword = event.target.value;
       dispatch({type: types.SET_SEARCH_KEYWORD, payload: searchKeyword});
 
-      console.log("searchKeyword = ", searchKeyword);
-      console.log("event.target.value = ", event.target.value);
-
       navigate(`?name=${event.target.value}`);
     }
   };

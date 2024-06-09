@@ -12,7 +12,6 @@ import {cartActions} from "../action/cartAction";
 const AppLayout = ({ children }) => {
   const location = useLocation();
   const dispatch = useDispatch();
-  // const user = { level: "admin" }; // 로그인 기능 만들고 지우기
   const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
