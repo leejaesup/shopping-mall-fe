@@ -48,7 +48,7 @@ const deleteCartItem = (id) => async (dispatch) => {
     dispatch(getCartList());
   } catch (error) {
     dispatch({type: types.DELETE_CART_ITEM_FAIL, payload: error});
-    dispatch(commonUiActions.showToastMessage(error, "error"));
+    dispatch(commonUiActions.showToastMessage(error.error, "error"));
   }
 };
 
@@ -65,7 +65,7 @@ const updateQty = (id, value) => async (dispatch) => {
     dispatch(commonUiActions.showToastMessage("상품 정보가 수정되었습니다.", "success"));
   } catch (error) {
     dispatch({type: types.UPDATE_CART_ITEM_FAIL, payload: error});
-    dispatch(commonUiActions.showToastMessage(error, "error"));
+    dispatch(commonUiActions.showToastMessage(error.error, "error"));
   }
 };
 
@@ -81,7 +81,7 @@ const getCartQty = () => async (dispatch) => {
     dispatch({type: types.GET_CART_QTY_SUCCESS, payload: response.data.qty});
   } catch (error) {
     dispatch({type: types.GET_CART_QTY_FAIL, payload: error});
-    dispatch(commonUiActions.showToastMessage(error, "error"));
+    dispatch(commonUiActions.showToastMessage(error.error, "error"));
   }
 };
 
